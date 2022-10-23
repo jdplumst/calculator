@@ -1,29 +1,32 @@
 // Select elements
 const numberBtns = document.querySelectorAll('.number');
+const operatorBtns = document.querySelectorAll('.operator');
 const screen = document.querySelector('.screen');
 
-// Stores current value displayed on the calculator (except intial value)
+// Stores values needed to do operations
 let displayValueCurr = null;
 let displayValuePrev = null;
+let operator = '';
 
 // Adds x and y
 function add(x, y) {
-    return x + y;
+    return Number(x) + Number(y);
 };
 
 // Subtracts x and y
 function subtract(x, y) {
-    return x - y;
+    return Number(x) - (y);
 };
 
 // Multiplies x and y
 function multiply(x, y) {
-    return x * y;
+    return Number(x) * Number(y);
   };
 
+// ADD DIVIDE BY 0 ERROR
 // Divides x and y
 function divide(x, y) {
-    return x / y;
+    return Number(x) / Number(y);
 }
 
 // Calls the function associated with operator with x and y as inputs
@@ -39,10 +42,10 @@ function operate(operator, x, y) {
     }
 }
 
-// MAKE SURE TO CHECK IF DISPLAYVALUECURR ENDS WITH '.' WHEN OPERATOR OR = IS PRESSED
 
 
-// Display number on screen when number button clicked
+
+// Display number on screen when number button clicked (indcluding decimal)
 numberBtns.forEach(num => {
     num.addEventListener('click', () => {
         if (num.textContent === '.') {
@@ -50,7 +53,6 @@ numberBtns.forEach(num => {
             if (displayValueCurr === null) {
                 displayValueCurr = '0.';
                 screen.textContent = displayValueCurr;
-                console.log('displayValueCurr: ' + displayValueCurr);
                 return;
             // Make sure there can only be one decimal
             } else if (displayValueCurr.includes('.') === true) {
@@ -69,12 +71,50 @@ numberBtns.forEach(num => {
         if (displayValueCurr === null) {
             screen.textContent = num.textContent;
             displayValueCurr = num.textContent;
-            console.log('displayValueCurr: ' + displayValueCurr);
         // Add number to screen to the right of all other numbers on screen
         } else {
             screen.textContent = screen.textContent + num.textContent;
             displayValueCurr += num.textContent;
-            console.log('displayValueCurr: ' + displayValueCurr);
         }
+        console.log('operator: ' + operator);
+        console.log('displayValuePrev: ' + displayValuePrev);
+        console.log('displayValueCurr: ' + displayValueCurr);
+        console.log('-----------------------------------------');
     })
 });
+
+// Perform calculations when operator buttons are pressed
+operatorBtns.forEach(op => {
+    op.addEventListener('click', () => {
+        // Add a 0 if the current number on screen ends with a decimal
+        if (displayValueCurr.charAt(displayValueCurr.length - 1) === '.') {
+            displayValueCurr += '0';
+            screen.textContent += '0';
+        }
+
+        // Treat screen value as 0 if operator pressed before any number clicked
+        if (displayValueCurr === null && operator === '') {
+            displayValuePrev = '0';
+        // Keep screen the same if this is first operator clicked after number
+        } else if (displayValuePrev === null) {
+            displayValuePrev = displayValueCurr;
+            displayValueCurr = null;
+        // Call operate function if two numbers separated by an operator 
+        // have been clicked and display result on screen
+        } else if (displayValueCurr !== null) {
+            displayValuePrev = operate(operator, displayValuePrev, displayValueCurr);
+            displayValueCurr = null;
+            screen.textContent = displayValuePrev;
+        }
+
+        // Store correct operator
+        if (op.textContent !== '=') {
+            operator = op.textContent;
+        }
+
+        console.log('operator: ' + operator);
+        console.log('displayValuePrev: ' + displayValuePrev);
+        console.log('displayValueCurr: ' + displayValueCurr);
+        console.log('-----------------------------------------');
+    })
+})
