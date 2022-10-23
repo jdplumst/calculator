@@ -3,7 +3,8 @@ const numberBtns = document.querySelectorAll('.number');
 const screen = document.querySelector('.screen');
 
 // Stores current value displayed on the calculator (except intial value)
-let displayValue = null;
+let displayValueCurr = null;
+let displayValuePrev = null;
 
 // Adds x and y
 function add(x, y) {
@@ -38,16 +39,42 @@ function operate(operator, x, y) {
     }
 }
 
+// MAKE SURE TO CHECK IF DISPLAYVALUECURR ENDS WITH '.' WHEN OPERATOR OR = IS PRESSED
+
+
+// Display number on screen when number button clicked
 numberBtns.forEach(num => {
     num.addEventListener('click', () => {
-        if (displayValue === null) {
+        if (num.textContent === '.') {
+            // Keep the 0 in front if decimal is clicked first
+            if (displayValueCurr === null) {
+                displayValueCurr = '0.';
+                screen.textContent = displayValueCurr;
+                console.log('displayValueCurr: ' + displayValueCurr);
+                return;
+            // Make sure there can only be one decimal
+            } else if (displayValueCurr.includes('.') === true) {
+                return;
+            }
+        }
+
+        if (num.textContent === '0') {
+            // Do not add leading zeroes to screen
+            if (displayValueCurr === null) {
+                return;
+            }
+        }
+
+        // Remove intial 0 when clicking number for first time
+        if (displayValueCurr === null) {
             screen.textContent = num.textContent;
-            displayValue = num.textContent;
-            console.log(displayValue);
+            displayValueCurr = num.textContent;
+            console.log('displayValueCurr: ' + displayValueCurr);
+        // Add number to screen to the right of all other numbers on screen
         } else {
             screen.textContent = screen.textContent + num.textContent;
-            displayValue += num.textContent;
-            console.log(displayValue);
+            displayValueCurr += num.textContent;
+            console.log('displayValueCurr: ' + displayValueCurr);
         }
     })
-})
+});
