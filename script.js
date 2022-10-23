@@ -1,6 +1,7 @@
 // Select elements
 const numberBtns = document.querySelectorAll('.number');
 const operatorBtns = document.querySelectorAll('.operator');
+const clearBtn = document.querySelector('#clear');
 const screen = document.querySelector('.screen');
 
 // Stores values needed to do operations
@@ -29,7 +30,7 @@ function divide(x, y) {
         return 'ERROR';
     }
     return Number(x) / Number(y);
-}
+};
 
 // Calls the function associated with operator with x and y as inputs
 function operate(operator, x, y) {
@@ -42,10 +43,7 @@ function operate(operator, x, y) {
     } else if (operator === '/') {
         return divide(x,y);
     }
-}
-
-
-
+};
 
 // Display number on screen when number button clicked (indcluding decimal)
 numberBtns.forEach(num => {
@@ -121,4 +119,12 @@ operatorBtns.forEach(op => {
         console.log('displayValueCurr: ' + displayValueCurr);
         console.log('-----------------------------------------');
     })
+});
+
+// Resets the calculator and clears values
+clearBtn.addEventListener('click', () => {
+    displayValueCurr = null;
+    displayValuePrev = null;
+    operator = '';
+    screen.textContent = '0';
 })
