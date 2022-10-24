@@ -2,6 +2,7 @@
 const numberBtns = document.querySelectorAll('.number');
 const operatorBtns = document.querySelectorAll('.operator');
 const clearBtn = document.querySelector('#clear');
+const parityBtn = document.querySelector('#parity');
 const screen = document.querySelector('.screen');
 
 // Stores values needed to do operations
@@ -133,4 +134,19 @@ clearBtn.addEventListener('click', () => {
     displayValuePrev = null;
     operator = '';
     screen.textContent = '0';
+});
+
+// Changes the parity of the current number
+parityBtn.addEventListener('click', () => {
+    // If entering new number, simply put display parity on screen (if negative)
+    if (displayValueCurr === null) {
+        displayValueCurr = '-';
+        screen.textContent = '-';
+    } else if (displayValueCurr.charAt(0) === '-') {
+        displayValueCurr = displayValueCurr.substring(1);
+        screen.textContent = screen.textContent.substring(1);
+    } else {
+        displayValueCurr = '-' + displayValueCurr;
+        screen.textContent = '-' + screen.textContent;
+    }
 })
