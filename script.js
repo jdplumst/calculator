@@ -3,6 +3,7 @@ const numberBtns = document.querySelectorAll('.number');
 const operatorBtns = document.querySelectorAll('.operator');
 const clearBtn = document.querySelector('#clear');
 const parityBtn = document.querySelector('#parity');
+const percentBtn = document.querySelector('#percent');
 const screen = document.querySelector('.screen');
 
 // Stores values needed to do operations
@@ -23,7 +24,7 @@ function subtract(x, y) {
 // Multiplies x and y
 function multiply(x, y) {
     return Number(x) * Number(y);
-  };
+};
 
 // Divides x and y
 function divide(x, y) {
@@ -49,8 +50,8 @@ function operate(operator, x, y) {
 // Display number on screen when number button clicked (including decimal)
 numberBtns.forEach(num => {
     num.addEventListener('click', () => {
-        // Make sure only 11 characters can be displayed on the screen
-        if (screen.textContent.length == 11 && displayValueCurr !== null) {
+        // Make sure only 10 numbers (including decimal but not parity) can be displayed on the screen
+        if (screen.textContent.length >= 10 && displayValueCurr !== null) {
             return;
         }
 
@@ -82,10 +83,6 @@ numberBtns.forEach(num => {
             screen.textContent = screen.textContent + num.textContent;
             displayValueCurr += num.textContent;
         }
-        console.log('operator: ' + operator);
-        console.log('displayValuePrev: ' + displayValuePrev);
-        console.log('displayValueCurr: ' + displayValueCurr);
-        console.log('-----------------------------------------');
     })
 });
 
@@ -111,7 +108,7 @@ operatorBtns.forEach(op => {
         // have been clicked and display result on screen
         } else if (displayValueCurr !== null) {
             displayValuePrev = operate(operator, displayValuePrev, displayValueCurr);
-            displayValuePrev = displayValuePrev.toString().slice(0, 11);
+            displayValuePrev = displayValuePrev.toString().slice(0, 10);
             displayValueCurr = null;
             screen.textContent = displayValuePrev;
         }
@@ -120,11 +117,6 @@ operatorBtns.forEach(op => {
         if (op.textContent !== '=') {
             operator = op.textContent;
         }
-
-        console.log('operator: ' + operator);
-        console.log('displayValuePrev: ' + displayValuePrev);
-        console.log('displayValueCurr: ' + displayValueCurr);
-        console.log('-----------------------------------------');
     })
 });
 
@@ -149,4 +141,13 @@ parityBtn.addEventListener('click', () => {
         displayValueCurr = '-' + displayValueCurr;
         screen.textContent = '-' + screen.textContent;
     }
-})
+});
+
+// Converts current number on screen to percentage
+percentBtn.addEventListener('click', () => {
+    if (displayValueCurr !== null) {
+        displayValueCurr = operate('/', displayValueCurr, 100);
+        displayValueCurr = displayValueCurr.toString().slice(0, 10);
+        screen.textContent = displayValueCurr;
+    }
+});
