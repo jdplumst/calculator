@@ -45,9 +45,14 @@ function operate(operator, x, y) {
     }
 };
 
-// Display number on screen when number button clicked (indcluding decimal)
+// Display number on screen when number button clicked (including decimal)
 numberBtns.forEach(num => {
     num.addEventListener('click', () => {
+        // Make sure only 11 characters can be displayed on the screen
+        if (screen.textContent.length == 11 && displayValueCurr !== null) {
+            return;
+        }
+
         if (num.textContent === '.') {
             // Keep the 0 in front if decimal is clicked first
             if (displayValueCurr === null || displayValueCurr === '0') {
@@ -86,11 +91,11 @@ numberBtns.forEach(num => {
 // Perform calculations when operator buttons are pressed
 operatorBtns.forEach(op => {
     op.addEventListener('click', () => {
-        // Add a 0 if the current number on screen ends with a decimal
+        // Remove decimal if the current number on screen ends with a decimal
         if (displayValueCurr !== null) {
             if (displayValueCurr.charAt(displayValueCurr.length - 1) === '.') {
-                displayValueCurr += '0';
-                screen.textContent += '0';
+                displayValueCurr = displayValueCurr.slice(0, -1);
+                screen.textContent = screen.textContent.slice(0, -1);
             }
         }
 
@@ -105,6 +110,7 @@ operatorBtns.forEach(op => {
         // have been clicked and display result on screen
         } else if (displayValueCurr !== null) {
             displayValuePrev = operate(operator, displayValuePrev, displayValueCurr);
+            displayValuePrev = displayValuePrev.toString().slice(0, 11);
             displayValueCurr = null;
             screen.textContent = displayValuePrev;
         }
