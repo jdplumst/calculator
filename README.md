@@ -9,3 +9,5 @@ The calculator works by evaluating a single pair of numbers at a time. For examp
 = 19 - 5 * 3
 = 14 * 3
 = 42
+
+The % operator works by entering a number then clicking the % operator. This converts the entered number to a percentage. For example, it would covert 4 to 0.04 and 700 to 7.
